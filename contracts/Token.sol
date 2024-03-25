@@ -8,15 +8,20 @@ contract Token {
 	string public symbol;
 	uint256 public decimals = 18;
 	uint256 public totalSupply ;//1,000000*10^18
-
-	//track bal
+	
 	mapping(address => uint256) public balanceOf;
+	mapping(address => mapping(address => uint256)) public allowance; 
 	
 	event Transfer(
 		address indexed from,
 		 address indexed to, 
 		 uint256 value
 		 );
+	event Approval(
+		address indexed owner, 
+		address indexed spender,
+		uint256 value
+		);
 
 	constructor(
 		string memory _name, 
@@ -47,4 +52,18 @@ contract Token {
 
 		return true;
 	}
+
+	//function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
+	function approve(address _spender,uint256 _value) 
+		public 
+		returns (bool success){
+
+		require(_spender != address(0));	
+		allowance[msg.sender][_spender] = _value;
+
+		emit Approval(msg.sender, _spender, _value);
+		return true;
+	}
+
+	//function allowance(address _owner,address _spender) public 	returns (uint256 remaining){}
 }
