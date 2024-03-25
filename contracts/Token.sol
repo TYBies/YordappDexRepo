@@ -14,8 +14,8 @@ contract Token {
 	
 	event Transfer(
 		address indexed from,
-		 address indexed to, 
-		 uint256 value
+		address indexed to, 
+		uint256 value
 		 );
 	event Approval(
 		address indexed owner, 
@@ -36,24 +36,47 @@ contract Token {
 
 	function transfer(address _to, uint256 _value) 
 		public 
-		returns (bool success){
+		returns (bool success)
+		{
 		//Require that sender has enough Token
 		require(balanceOf[msg.sender] >= _value);
-		require(_to != address(0));
-
-		//Deduct Token form Spender
-		balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
-
-		//credit token to receiver
-		balanceOf[_to]= balanceOf[_to] + _value;
-
-		//Emit Event
-		emit Transfer(msg.sender, _to, _value);
+		_transfer(msg.sender, _to, _value);
 
 		return true;
 	}
 
-	//function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
+	function transferFrom(address _from, address _to, uint256 _value) 
+		public
+		returns (bool success){
+
+			//check Approval
+			require(_value <= balanceOf[_from])	;
+			require(_value <= allowance[_from][msg.sender]); //value has to be less than the approved amount b4 transfer
+
+			//Reset Allowance to avoid double spend till the go through approval again			
+			allowance[_from][msg.sender] -= _value;
+
+			//spend Tokens		
+			_transfer(_from, _to, _value);		
+			
+			return true;
+		}
+
+		function _transfer(
+			address  _from,
+			address  _to, 
+			uint256 _value
+		)internal{
+			require(_to != address(0));
+			//Deduct Token form Spender
+			balanceOf[_from] = balanceOf[_from] - _value;
+			//credit token to receiver
+			balanceOf[_to]= balanceOf[_to] + _value;
+
+			//Emit Event
+			emit Transfer(_from, _to, _value);
+	}
+
 	function approve(address _spender,uint256 _value) 
 		public 
 		returns (bool success){
