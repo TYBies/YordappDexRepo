@@ -50,8 +50,8 @@ contract Token {
 		returns (bool success){
 
 			//check Approval
-			require(_value <= balanceOf[_from])	;
-			require(_value <= allowance[_from][msg.sender]); //value has to be less than the approved amount b4 transfer
+			require(_value <= balanceOf[_from], "insufficient balance")	;
+			require(_value <= allowance[_from][msg.sender],"insufficient allowance"); //value has to be less than the approved amount b4 transfer
 
 			//Reset Allowance to avoid double spend till the go through approval again			
 			allowance[_from][msg.sender] -= _value;
