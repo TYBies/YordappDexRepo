@@ -1,2 +1,2 @@
 # YordappDexRepo
-A Repository for my first Decentralised Exchange.
+A Repository for my Decentralised Exchange Application.
