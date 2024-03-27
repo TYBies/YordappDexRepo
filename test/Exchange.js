@@ -58,25 +58,25 @@ describe('Exchange', () => {
         expect(await exchange.balanceOf(token1.address, user1.address)).to.equal(amount)
       })
 
-      //it('emits a Deposit event', async () => {
-        //const event = result.events[1] // 2 events are emitted
-       // expect(event.event).to.equal('Deposit')
+      it('emits a Deposit event', async () => {
+        const event = result.events[1] // 2 events are emitted
+        expect(event.event).to.equal('Deposit')
 
-        //const args = event.args
-        //expect(args.token).to.equal(token1.address)
-       // expect(args.user).to.equal(user1.address)
-       // expect(args.amount).to.equal(amount)
-        //expect(args.balance).to.equal(amount)
-     // })
+        const args = event.args
+        expect(args.token).to.equal(token1.address)
+        expect(args.user).to.equal(user1.address)
+        expect(args.amount).to.equal(amount)
+        expect(args.balance).to.equal(amount)
+      })
 
     })
 
-    //describe('Failure', () => {
-      //it('fails when no tokens are approved', async () => {
+    describe('Failure', () => {
+      it('fails when no tokens are approved', async () => {
         // Don't approve any tokens before depositing
-       // await expect(exchange.connect(user1).depositToken(token1.address, amount)).to.be.reverted
-      //})
-   // })
+        await expect(exchange.connect(user1).depositToken(token1.address, amount)).to.be.reverted
+      })
+    })
 
   })
 
