@@ -18,10 +18,10 @@ describe('Exchange', () => {
     token2 = await Token.deploy('Mock Dai', 'mDAI', '1000000')
 
     accounts = await ethers.getSigners()
-    deployer = accounts[0]
-    feeAccount = accounts[1]
-    user1 = accounts[2]
-    user2 = accounts[3]
+    deployer = accounts[0]//deployer Account
+    feeAccount = accounts[1]//Exchange Account
+    user1 = accounts[2] // Other User1
+    user2 = accounts[3] // Other User2
 
     let transaction = await token1.connect(deployer).transfer(user1.address, tokens(100))
     await transaction.wait()
@@ -176,6 +176,9 @@ describe('Exchange', () => {
       })
 
       it('emits an Order event', async () => {
+        console.log("------------THIS IS WHAT WE ARE LOOKING FOR----------------------")
+        console.log(result)
+
         const event = result.events[0]
         expect(event.event).to.equal('Order')
 
